@@ -1,0 +1,19 @@
+<h2>IAM – USE Identität</h2>
+<pre id="iam">Noch keine ID.</pre>
+
+<script>
+function updateIAM(f){
+    let id = makeUSE_ID(f);
+
+    document.getElementById("iam").innerText =
+        "CORE = " + id.core + "\n" +
+        "pos(CORE) = (" + id.pos[0] + ", " + id.pos[1] + ")\n\n" +
+        "AXIS = { IKI, BIR, UC, MA³ }\n" +
+        "LOAD = { RESPO, RAW, PIPE }\n" +
+        "RUN = P4 → P0 → P1 → P2 → Pe\n" +
+        "MAP = { Φ, φ, φ², φ∞ }\n\n" +
+        "respo = " + id.respo + "\n" +
+        "code = " + id.code + "\n" +
+        "scientist = " + id.scientist + "\n";
+}
+</script>
