@@ -5,7 +5,7 @@
 <title>USE – Interaktions‑Panel</title>
 <style>
 body { background:#000; color:#0f0; font-family:monospace; }
-h1, h2 { color:#6cf; }
+h1 { color:#6cf; }
 pre { background:#000; padding:10px; border:1px solid #333; }
 input { width:80%; padding:6px; background:#111; color:#0f0; border:1px solid #333; }
 button { padding:8px 14px; background:#333; color:#eee; border:1px solid #666; cursor:pointer; }
@@ -16,7 +16,7 @@ button:hover { background:#444; }
 <body>
 
 <h1>USE – Interaktions‑Panel</h1>
-<p>Zeigt mathematisch, was der User getan hat.</p>
+<p>Mathematische Darstellung der Eingabe.</p>
 
 <input id="u" type="text" placeholder="Φ + AX + P4">
 <button onclick="go()">SCAN</button>
@@ -24,7 +24,8 @@ button:hover { background:#444; }
 <pre id="out">Noch keine Eingabe.</pre>
 
 <script>
-// kompatibel mit index.html
+// ─── IMPORTIERTE LOGIK (wie move.js) ────────────────────────────────
+
 function orbit(f){
     if (f.includes("Φ")) return "IKI";
     if (f.includes("φ∞")) return "MA³";
@@ -48,18 +49,30 @@ function run(f){
     return "none";
 }
 
-function go(){
-    let f = document.getElementById("u").value;
+function math(f){
+    return {
+        X: f.length % 7,
+        Y: f.length % 11,
+        Z: f.length % 13,
+        MASS: f.length * 3,
+        POS: f.length % 12
+    };
+}
 
-    let X = f.length % 7;
-    let Y = f.length % 11;
-    let Z = f.length % 13;
+// ─── USE‑SCAN (wie move.js, aber kompakt) ────────────────────────────
+
+function go(){
+    const f = document.getElementById("u").value;
+
+    const m = math(f);
 
     document.getElementById("out").innerText =
-        "Interaktion – mathematisch\n\n" +
-        "X = " + X + "\n" +
-        "Y = " + Y + "\n" +
-        "Z = " + Z + "\n" +
+        "USE – mathematisch\n\n" +
+        "X = " + m.X + "\n" +
+        "Y = " + m.Y + "\n" +
+        "Z = " + m.Z + "\n" +
+        "MASS = " + m.MASS + "\n" +
+        "POS = " + m.POS + "\n\n" +
         "Orbit = " + orbit(f) + "\n" +
         "Operator = " + operator(f) + "\n" +
         "RUN = " + run(f) + "\n" +
