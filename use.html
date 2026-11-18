@@ -1,52 +1,91 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>use() – iki1uc Operator</title>
-<style>
-body{background:#000;color:#0f0;font-family:monospace;padding:20px}
-pre{background:#111;padding:10px;border:1px solid #333}
-button{background:#111;border:1px solid #0f0;color:#0f0;padding:6px 12px;margin:6px;cursor:pointer}
-button:hover{background:#0f0;color:#000}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>use() – iki1uc Operator</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: monospace;
+      background: #000;
+      color: #00ff00;
+    }
+
+    body { padding: 20px; }
+    pre {
+      max-width: 900px;
+      padding: 12px;
+      border: 1px solid #333;
+      background: #111;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    button {
+      margin: 6px;
+      padding: 8px 14px;
+      border: 1px solid #00ff00;
+      background: #111;
+      color: #00ff00;
+      cursor: pointer;
+    }
+
+    button:hover, button:focus-visible {
+      background: #00ff00;
+      color: #000;
+    }
+  </style>
 </head>
 <body>
+  <h2>use(user(lage(respo(argumenteria, myWIKI), formeln), fähigkeiten))</h2>
+  <button id="btn" type="button">use()</button>
+  <pre id="out" role="status" aria-live="polite">Bereit.</pre>
 
-<h2>use(user(lage(respo(argumenteria,myWIKI),formeln),fähigkeiten))</h2>
-<button id="btn">use()</button>
-<pre id="out">bereit.</pre>
+  <script type="module">
+    import {
+      scan, orbit, operator, run, math, usability
+    } from "./move.js";
+    import { USE_ID } from "./ID.js";
 
-<script type="module">
-import { scan, orbit, operator, run, math, usability } from "./move.js";
-import { USE_ID } from "./ID.html"; // falls ID.html als .js liegt: "./ID.js"
+    const MODULES = {
+      LAGE: ["W", "S", "A", "D", "Q", "R", "Y", "C", "X"],
+      RESPO: ["Struktur", "Ordnung", "Wirkung"],
+      ARGUMENT: ["Klarheit", "Integrität"],
+      WIKI: "Formeln sichtbar (neutral)",
+      TMP: "TMP-LAGE: aktiv",
+      GHOST: "GHOST-SCAN: bereit",
+      FINAL: "reFINAL: +1 System-Reingewinn"
+    };
 
-const MODULES = {
-  LAGE: ["W","S","A","D","Q","R","Y","C","X"],
-  RESPO: ["Struktur","Ordnung","Wirkung"],
-  ARGUMENT: ["Klarheit","Integrität"],
-  WIKI: "Formeln sichtbar (neutral)",
-  TMP: "TMP-LAGE: aktiv",
-  GHOST: "GHOST-SCAN: bereit",
-  FINAL: "reFINAL: +1 System-Reingewinn"
-};
+    const output = document.querySelector("#out");
 
-document.getElementById("btn").onclick = () => {
-  // use() = 1 Aufruf, alles aus move.js, nichts kopiert
-  const probe = "Φ + AX + P4";
-  const u = usability({ name: "iki", level: 1, status: "bereit" }, probe);
-  document.getElementById("out").textContent =
-    "use() aktiv — BESSER\n" +
-    "──────────────────────────────\n" +
-    "LAGE: " + MODULES.LAGE.join(" + ") + "\n" +
-    "RESPO: " + MODULES.RESPO.join(" + ") + "\n" +
-    "Argumenteria: " + MODULES.ARGUMENT.join(" + ") + "\n" +
-    "myWIKI: " + MODULES.WIKI + "\n" +
-    MODULES.TMP + "\n" + MODULES.GHOST + "\n" + MODULES.FINAL + "\n\n" +
-    "SCAN: " + JSON.stringify(u.scan) + "\n" +
-    "ORBIT: " + u.orbit + " | OP: " + u.operator + " | RUN: " + u.run + "\n" +
-    "MATH: " + JSON.stringify(u.math) + "\n" +
-    "USE_ID: " + JSON.stringify(USE_ID ?? "in ID.js");
-};
-</script>
+    document.querySelector("#btn").addEventListener("click", () => {
+      try {
+        const user = { name: "iki", level: 1, status: "active" };
+        const result = usability(user, "Φ + AX + P4");
+
+        output.textContent = [
+          "use() aktiv",
+          "──────────────────────────────",
+          `LAGE: ${MODULES.LAGE.join(" + ")}`,
+          `RESPO: ${MODULES.RESPO.join(" + ")}`,
+          `Argumenteria: ${MODULES.ARGUMENT.join(" + ")}`,
+          `myWIKI: ${MODULES.WIKI}`,
+          MODULES.TMP,
+          MODULES.GHOST,
+          MODULES.FINAL,
+          "",
+          `SCAN: ${JSON.stringify(result.scan ?? scan)}`,
+          `ORBIT: ${result.orbit ?? orbit} | OP: ${result.operator ?? operator} | RUN: ${result.run ?? run}`,
+          `MATH: ${JSON.stringify(result.math ?? math)}`,
+          `USE_ID: ${JSON.stringify(USE_ID)}`
+        ].join("\n");
+      } catch (error) {
+        output.textContent = `Fehler: ${error.message}`;
+        console.error(error);
+      }
+    });
+  </script>
 </body>
 </html>
